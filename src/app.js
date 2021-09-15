@@ -13,7 +13,7 @@ app.use(createProxyMiddleware({
   followRedirects: true,
   proxyTimeout: 5000,
   logLevel: LOG_LEVEL,
-  logProvider: logger,
+  logProvider: () => logger,
 }));
 
 module.exports = app;
