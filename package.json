@@ -1,0 +1,24 @@
+{
+  "name": "http-proxy",
+  "version": "1.0.0",
+  "description": "HTTP Proxy with rate limit and statistics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buccfer/http-proxy.git"
+  },
+  "keywords": [
+    "http",
+    "proxy",
+    "rate-limit"
+  ],
+  "author": "Fernando Buccella",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buccfer/http-proxy/issues"
+  },
+  "homepage": "https://github.com/buccfer/http-proxy#readme"
+}
