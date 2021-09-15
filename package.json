@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "HTTP Proxy with rate limit and statistics",
   "main": "server.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +22,9 @@
     "url": "https://github.com/buccfer/http-proxy/issues"
   },
   "homepage": "https://github.com/buccfer/http-proxy#readme",
+  "engines": {
+    "node": ">= 14.17.6"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.1",
