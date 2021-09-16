@@ -5,20 +5,30 @@ const { RateLimiterRedis, RateLimiterRes } = require('rate-limiter-flexible');
 const redisClient = require('../lib/redis');
 const logger = require('../logger');
 
+/**
+ * @summary Creates a rate limit middleware.
+ *
+ * @param {Object} options
+ * @param {number} options.requestsLimit - Max amount of requests per window.
+ * @param {number} options.windowDurationInSeconds - Window length in seconds.
+ * @param {Function} [options.keyGenerator] - Function used to generate keys. Defaults to req.ip.
+ *
+ * @returns {Function} A rate limit middleware.
+ * */
 module.exports = function createRateLimitMiddleware(options) {
   const rateLimiter = new RateLimiterRedis({
     keyPrefix: 'proxy-rate-limit',
-    points: options.requestsCount,
-    duration: options.durationInSeconds,
+    points: options.requestsLimit,
+    duration: options.windowDurationInSeconds,
     storeClient: redisClient,
-    inmemoryBlockOnConsumed: options.points, // Prevent DDoS attacks.
+    inmemoryBlockOnConsumed: options.requestsLimit, // Prevent DDoS attacks.
   });
 
   const keyGenerator = options.keyGenerator || (req => req.ip);
 
   const buildHeaders = (result, includeRetryAfter = true) => {
     const headers = {
-      'X-RateLimit-Limit': options.requestsCount,
+      'X-RateLimit-Limit': options.requestsLimit,
       'X-RateLimit-Remaining': result.remainingPoints,
       'X-RateLimit-Reset': new Date(Date.now() + result.msBeforeNext),
     };
