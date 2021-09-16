@@ -3,6 +3,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const createRateLimitMiddleware = require('./middlewares/rate-limit');
 const logger = require('./logger');
 const {
   TARGET_URL,
@@ -20,6 +21,16 @@ app.set('trust proxy', true);
 app.use(morgan(REQUEST_LOGGER_FORMAT, {
   stream: {
     write: message => logger.info(message.trim()),
+  }
+}));
+
+app.use(createRateLimitMiddleware({
+  requestsLimit: 1,
+  windowDurationInSeconds: 10,
+  keyGenerator(req) {
+    // Here we choose the rate limit criteria.
+    // Will just use by IP, but probably using by API Key makes more sense.
+    return req.ip;
   }
 }));
 
