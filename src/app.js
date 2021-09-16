@@ -13,6 +13,10 @@ const {
 
 const app = express();
 
+// We enable this in case we are behind a reverse proxy like AWS ALB.
+// See https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', true);
+
 app.use(morgan(REQUEST_LOGGER_FORMAT, {
   stream: {
     write: message => logger.info(message.trim()),
