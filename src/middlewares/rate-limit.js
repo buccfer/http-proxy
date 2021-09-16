@@ -14,6 +14,8 @@ module.exports = function createRateLimitMiddleware(options) {
     inmemoryBlockOnConsumed: options.points, // Prevent DDoS attacks.
   });
 
+  const keyGenerator = options.keyGenerator || (req => req.ip);
+
   const buildHeaders = (result, includeRetryAfter = true) => {
     const headers = {
       'X-RateLimit-Limit': options.requestsCount,
@@ -30,6 +32,7 @@ module.exports = function createRateLimitMiddleware(options) {
 
   return async function rateLimitMiddleware(req, res, next) {
     try {
+      const key = keyGenerator(req);
       const result = await rateLimiter.consume(key, 1);
       const headers = buildHeaders(result, false);
       res.set(headers);
