@@ -1,0 +1,12 @@
+extends: airbnb-base
+
+env:
+  node: true
+  mocha: true
+
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: script
+
+rules:
+  'strict': ['error', 'global']

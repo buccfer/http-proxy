@@ -5,6 +5,7 @@
   "main": "server.js",
   "private": true,
   "scripts": {
+    "lint": "eslint --cache --format compact .",
     "dev": "nodemon src/server.js"
   },
   "repository": {
@@ -35,6 +36,9 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
     "nodemon": "^2.0.12"
   }
 }
