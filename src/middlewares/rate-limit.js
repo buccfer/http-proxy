@@ -24,7 +24,7 @@ module.exports = function createRateLimitMiddleware(options) {
     inmemoryBlockOnConsumed: options.requestsLimit, // Prevent DDoS attacks.
   });
 
-  const keyGenerator = options.keyGenerator || (req => req.ip);
+  const keyGenerator = options.keyGenerator || ((req) => req.ip);
 
   const buildHeaders = (result, includeRetryAfter = true) => {
     const headers = {

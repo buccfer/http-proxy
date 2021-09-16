@@ -20,8 +20,8 @@ app.set('trust proxy', true);
 
 app.use(morgan(REQUEST_LOGGER_FORMAT, {
   stream: {
-    write: message => logger.info(message.trim()),
-  }
+    write: (message) => logger.info(message.trim()),
+  },
 }));
 
 app.use(createRateLimitMiddleware({
@@ -31,7 +31,7 @@ app.use(createRateLimitMiddleware({
     // Here we choose the rate limit criteria.
     // Will just use by IP, but probably using by API Key makes more sense.
     return req.ip;
-  }
+  },
 }));
 
 app.use(createProxyMiddleware({
@@ -48,7 +48,7 @@ app.use(createProxyMiddleware({
     // The proxy must be configured with a limit that is lower than or equal to the target's
     // to avoid inconsistencies in responses.
     Object.assign(proxyRes.headers, rateLimitHeaders);
-  }
+  },
 }));
 
 module.exports = app;
