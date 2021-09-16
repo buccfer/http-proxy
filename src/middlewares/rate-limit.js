@@ -7,16 +7,32 @@ const logger = require('../logger');
 
 module.exports = function createRateLimitMiddleware(options) {
   const rateLimiter = new RateLimiterRedis({
-    keyPrefix: 'proxy-rate-limit::',
+    keyPrefix: 'proxy-rate-limit',
     points: options.requestsCount,
     duration: options.durationInSeconds,
     storeClient: redisClient,
     inmemoryBlockOnConsumed: options.points, // Prevent DDoS attacks.
   });
 
+  const buildHeaders = (result, includeRetryAfter = true) => {
+    const headers = {
+      'X-RateLimit-Limit': options.requestsCount,
+      'X-RateLimit-Remaining': result.remainingPoints,
+      'X-RateLimit-Reset': new Date(Date.now() + result.msBeforeNext),
+    };
+
+    if (includeRetryAfter) {
+      headers['Retry-After'] = result.msBeforeNext / 1000;
+    }
+
+    return headers;
+  };
+
   return async function rateLimitMiddleware(req, res, next) {
     try {
-      await rateLimiter.consume(key, 1);
+      const result = await rateLimiter.consume(key, 1);
+      const headers = buildHeaders(result, false);
+      res.set(headers);
       next();
     } catch (err) {
       if (!(err instanceof RateLimiterRes)) {
@@ -29,18 +45,12 @@ module.exports = function createRateLimitMiddleware(options) {
 
       const statusCode = httpStatus.TOO_MANY_REQUESTS;
       const errorMessage = httpStatus[statusCode];
+      const headers = buildHeaders(err);
 
-      res.status(statusCode)
-        .set({
-          'Retry-After': err.msBeforeNext / 1000,
-          'X-RateLimit-Limit': options.requestsCount,
-          'X-RateLimit-Remaining': err.remainingPoints,
-          'X-RateLimit-Reset': new Date(Date.now() + err.msBeforeNext),
-        })
-        .json({
-          statusCode,
-          errorMessage,
-        });
+      res.status(statusCode).set(headers).json({
+        statusCode,
+        errorMessage,
+      });
     }
   };
 };
