@@ -41,6 +41,14 @@ app.use(createProxyMiddleware({
   proxyTimeout: PROXY_TIMEOUT,
   logLevel: LOG_LEVEL,
   logProvider: () => logger,
+  onProxyRes(proxyRes, req, res) {
+    const { rateLimitHeaders } = res.locals;
+
+    // Use the proxy's rate limit headers and not the ones from the target.
+    // The proxy must be configured with a limit that is lower than or equal to the target's
+    // to avoid inconsistencies in responses.
+    Object.assign(proxyRes.headers, rateLimitHeaders);
+  }
 }));
 
 module.exports = app;

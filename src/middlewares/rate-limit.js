@@ -44,8 +44,7 @@ module.exports = function createRateLimitMiddleware(options) {
     try {
       const key = keyGenerator(req);
       const result = await rateLimiter.consume(key, 1);
-      const headers = buildHeaders(result, false);
-      res.set(headers);
+      res.locals.rateLimitHeaders = buildHeaders(result, false);
       next();
     } catch (err) {
       if (!(err instanceof RateLimiterRes)) {
