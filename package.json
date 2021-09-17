@@ -1,0 +1,44 @@
+{
+  "name": "http-proxy",
+  "version": "1.0.0",
+  "description": "HTTP Proxy with rate limit and statistics",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --cache --format compact .",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buccfer/http-proxy.git"
+  },
+  "keywords": [
+    "http",
+    "proxy",
+    "rate-limit"
+  ],
+  "author": "Fernando Buccella",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buccfer/http-proxy/issues"
+  },
+  "homepage": "https://github.com/buccfer/http-proxy#readme",
+  "engines": {
+    "node": ">= 14.17.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.1",
+    "http-status": "^1.5.0",
+    "morgan": "^1.10.0",
+    "rate-limiter-flexible": "^2.2.4",
+    "redis": "^3.1.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "nodemon": "^2.0.12"
+  }
+}
