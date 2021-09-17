@@ -8,6 +8,8 @@ const {
   TARGET_URL,
   PROXY_TIMEOUT,
   REDIS_URL,
+  REQUESTS_LIMIT,
+  WINDOW_DURATION_IN_SECONDS,
 } = process.env;
 
 module.exports = {
@@ -18,4 +20,6 @@ module.exports = {
   TARGET_URL: TARGET_URL || 'https://jsonplaceholder.typicode.com',
   PROXY_TIMEOUT: parseInt(PROXY_TIMEOUT, 10) || 5000,
   REDIS_URL: REDIS_URL || 'redis://redis',
+  REQUESTS_LIMIT: parseInt(REQUESTS_LIMIT, 10) || 1,
+  WINDOW_DURATION_IN_SECONDS: parseInt(WINDOW_DURATION_IN_SECONDS, 10) || 10,
 };
