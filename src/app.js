@@ -10,6 +10,8 @@ const {
   LOG_LEVEL,
   REQUEST_LOGGER_FORMAT,
   PROXY_TIMEOUT,
+  REQUESTS_LIMIT,
+  WINDOW_DURATION_IN_SECONDS,
 } = require('./config');
 
 const app = express();
@@ -25,8 +27,8 @@ app.use(morgan(REQUEST_LOGGER_FORMAT, {
 }));
 
 app.use(createRateLimitMiddleware({
-  requestsLimit: 1,
-  windowDurationInSeconds: 10,
+  requestsLimit: REQUESTS_LIMIT,
+  windowDurationInSeconds: WINDOW_DURATION_IN_SECONDS,
   keyGenerator(req) {
     // Here we choose the rate limit criteria.
     // Will just use by IP, but probably using by API Key makes more sense.
